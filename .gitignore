@@ -1,0 +1,34 @@
+# Cangjie build artifacts
+target/
+*.cjp
+cangjie-repo.toml
+cangjie-repo.toml.*
+__pycache__/
+*.pyc
+scripts/receipts/
+build/
+output/
+*.cjo
+*.cjo.flag
+*.a
+*.so
+*.o
+module-resolve.json
+module-lock.json
+cjpm.lock
+cangjie-repo.toml
+.cjpm-history
+*.macrocall
+*.gcda
+*.gcno
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+.atomcode/
+.cache/
+.cursorrules
+
+# Local session logs
+datalog/

@@ -1,0 +1,8 @@
+igNTP — NOTICE
+Copyright 2026 Celading
+
+Independent implementation. References to protocol names, specifications and other products do not imply affiliation, sponsorship, endorsement or certification. Any third-party marks belong to their respective owners.
+
+RFC 4330 is the recorded SNTP reference. Multi-server selection is an application policy, not an implementation of the complete NTP clock-discipline algorithms.
+
+Library code is licensed under Apache-2.0; see LICENSE.

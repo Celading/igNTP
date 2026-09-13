@@ -1,0 +1,23 @@
+# Integration metadata; run verification for the source revision in use.
+member: igNTP
+package: igntp
+version: '0.1.0'
+cangjie: '1.1.3'
+release_tier: Preview
+license: Apache-2.0
+license_file: LICENSE
+notice_file: NOTICE
+
+build:
+  command: cjpm build -j1
+  test_binaries: [igntp_test]
+  test_command: "cjpm build -j1 && ./target/release/bin/igntp_test"
+
+dependencies: []
+test_or_demo_dependencies: []
+entry_reference: manual/docs/03-api.md
+usage_reference: README.md
+limits_reference: manual/docs/06-limits.md
+known_gaps_reference: manual/docs/08-known-gaps.md
+verification_reference: manual/skill/verify.md
+registry_availability: verify-before-use
