@@ -21,8 +21,23 @@ public class TimeSync {
     /// Build a transmit timestamp from a Unix-epoch millisecond clock
     /// reading (whole seconds + scaled fraction; sub-millisecond residue
     /// is truncated — recorded precision boundary).
+    ///
+    /// Input domain: extreme Int64
+    /// magnitudes and readings past the era-0 ceiling are TYPED
+    /// rejections here — never an arithmetic OverflowException crash and
+    /// never a silently out-of-range seconds value. The era-0 field ends
+    /// at 2036-02-07T06:28:16Z (2^32 seconds after 1900); SNTP packets
+    /// carry no era number, so post-era readings cannot be represented.
+    /// The codec's 32-bit field range check remains the wire-side
+    /// negative control for this source-side guard.
     public static func timestampFromUnixMillis(unixMillis: Int64): NtpTimestamp {
-        let ntpMillis = unixToNtpMs(unixMillis)
+        let offset = NtpConstants.unixNtpEpochOffsetMs
+        if (unixMillis > 9223372036854775807 - offset) {
+            throw NtpException(
+                code: NtpErrorCode.InvalidArgument,
+                message: "unix time overflows the NTP epoch conversion: ${unixMillis}")
+        }
+        let ntpMillis = unixMillis + offset
         // F5: times before the NTP era 0 (year 1900) cannot be
         // represented in the unsigned 32-bit seconds field.
         if (ntpMillis < 0) {
@@ -31,6 +46,11 @@ public class TimeSync {
                 message: "time predates the NTP era (unix < 1900): ${unixMillis}")
         }
         let seconds = floorDiv(ntpMillis, 1000)
+        if (seconds > 0xFFFFFFFF) {
+            throw NtpException(
+                code: NtpErrorCode.InvalidArgument,
+                message: "time exhausts the NTP era-0 seconds field (era rollover > 2036-02-07): ${unixMillis}")
+        }
         let remainderMs = ntpMillis - seconds * 1000
         // fraction = remainderMs * 2^32 / 1000 (Int64-safe).
         let fraction = (remainderMs * 4294967296) / 1000

@@ -1,11 +1,11 @@
 [package]
   cjc-version = "1.1.3"
   name = "igntp"
-  version = "0.1.0"
+  version = "0.2.0"
   output-type = "static"
   src-dir = "src"
   compile-option = "-Woff unused"
   license = "Apache-2.0"
-  description = "SNTP v4 unicast client and timestamp calculations for Cangjie applications."
   include = ["src", "README.md", "LICENSE", "NOTICE"]
-  exclude = ["target", "build", "_helper", "scripts", "cangjie-repo.toml", "**/cangjie-repo.toml", "**/cangjie-repo.toml.*", "**/__pycache__/**", "**/*.pyc", "**/*.bak"]
+  exclude = ["target", "build", "_helper", "scripts", "cangjie-repo.toml", "__pycache__", "*.pyc", "*.bak"]
+  description = "SNTP v4 unicast client and timestamp calculations for Cangjie applications."

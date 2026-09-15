@@ -37,13 +37,19 @@ igntp = { path = "../igntp" }
 Use this as `src/main.cj` in an executable consumer:
 
 ```cangjie
-package preview_example
+package ntp_preview
+import igntp.Commons.*
 import igntp.Features.timesync.*
 main(): Int64 {
     let unixMillis: Int64 = 1700000000000
     let result = TimeSync.ntpToUnixMs(TimeSync.unixToNtpMs(unixMillis))
     println(result)
     if (result != unixMillis) { return 1 }
+    // era-0 ceiling: readings past 2036-02-07T06:28:16Z are rejected typed
+    try {
+        let _ = TimeSync.timestampFromUnixMillis(2085978496000)
+        return 2
+    } catch (_: NtpException) { }
     return 0
 }
 ```
@@ -53,6 +59,8 @@ Build with `cjpm build -j1` and run the emitted executable (`target/release/bin/
 ```text
 1700000000000
 ```
+
+The era guard is part of this increment: `timestampFromUnixMillis` rejects readings before the NTP epoch (1900) and past the era-0 ceiling (2036-02-07T06:28:16Z) with a typed error instead of producing an out-of-range seconds field.
 
 ## Error handling
 
